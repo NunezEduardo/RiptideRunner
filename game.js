@@ -6,12 +6,24 @@
   // Pixel scale: render to low-res buffer then scale up for pixel-art look
   const BASE_W = 320; // logical width
   const BASE_H = 160; // logical height
-  const SCALE = 3; // final canvas size = BASE * SCALE
 
-  canvas.width = BASE_W * SCALE;
-  canvas.height = BASE_H * SCALE;
-  canvas.style.width = canvas.width + 'px';
-  canvas.style.height = canvas.height + 'px';
+  // Responsive/resolution setup: we'll scale the canvas to fit the viewport (good for mobile portrait)
+  function resizeCanvasToFit(){
+    const dpr = window.devicePixelRatio || 1;
+    // choose CSS scale based on available width (portrait friendly). Prefer integer scale when possible for crisper pixels.
+    let cssScale = Math.floor(window.innerWidth / BASE_W);
+    if (cssScale < 1) cssScale = window.innerWidth / BASE_W; // allow fractional if too narrow
+    const cssW = Math.max(120, Math.round(BASE_W * cssScale));
+    const cssH = Math.round(BASE_H * cssScale);
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    // set backing store size for high-dpi clarity
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+  }
+  // initial resize and on window changes
+  resizeCanvasToFit();
+  window.addEventListener('resize', resizeCanvasToFit);
   const buffer = document.createElement('canvas');
   buffer.width = BASE_W; buffer.height = BASE_H;
   const bctx = buffer.getContext('2d');
@@ -367,10 +379,10 @@
       bctx.fillStyle = '#fff'; bctx.fillText('Game Over — Click Jugar', BASE_W/2-60, BASE_H/2);
     }
 
-    // blit scaled
-    ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.drawImage(buffer, 0, 0, BASE_W, BASE_H, 0, 0, BASE_W * SCALE, BASE_H * SCALE);
+  // blit scaled to actual canvas size (backing store pixels)
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(buffer, 0, 0, BASE_W, BASE_H, 0, 0, canvas.width, canvas.height);
   }
 
   function drawDunes(ctx, offset, sc){
