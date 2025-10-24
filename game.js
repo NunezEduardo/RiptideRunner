@@ -31,6 +31,27 @@
   // Read DOM texts (we will draw them inside the canvas for pixel look)
   const domTitle = document.querySelector('main h1');
   const domFooter = document.querySelector('main footer');
+  // Background audio (will try to play 'bg.mp3' in the same folder). Play only after a user gesture to avoid autoplay blocking.
+  const bgAudio = new Audio('bg.mp3');
+  bgAudio.loop = true;
+  bgAudio.preload = 'auto';
+  bgAudio.volume = 0.45;
+  let audioStarted = false;
+
+  // Attempt to start audio on first user gesture. No UI control to mute/stop per user request.
+  function startAudioOnFirstGesture(){
+    if (audioStarted) return;
+    audioStarted = true;
+    bgAudio.muted = false;
+    bgAudio.play().catch(()=>{
+      // play may be blocked; try to play silently to prime decoder, then keep it muted until browser allows audible playback.
+      try { bgAudio.muted = true; bgAudio.play().catch(()=>{}); } catch(e){}
+    });
+    window.removeEventListener('pointerdown', startAudioOnFirstGesture);
+    window.removeEventListener('keydown', startAudioOnFirstGesture);
+  }
+  window.addEventListener('pointerdown', startAudioOnFirstGesture, {passive:true});
+  window.addEventListener('keydown', startAudioOnFirstGesture, {passive:true});
 
   // Game state
   let gameState = 'playing'; // 'playing' | 'gameover' | 'paused'
