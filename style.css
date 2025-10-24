@@ -1,0 +1,31 @@
+:root{
+  --bg1: #ffd6e0; /* cielo claro rosado */
+  --bg2: #ffc0a3; /* naranja suave */
+  --dune1: #ffb3c6;
+  --dune2: #ff9a7a;
+  --accent: #7b3f3f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background: linear-gradient(180deg,var(--bg1), var(--bg2));
+  color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+}
+main{width:100%;max-width:920px;padding:20px;text-align:center}
+h1{font-size:28px;margin-bottom:6px}
+.meta{font-size:13px;opacity:.85;margin-bottom:12px}
+.game-wrap{background:transparent;border-radius:8px;display:flex;justify-content:center}
+canvas{background:transparent;image-rendering:pixelated;display:block;border:6px solid rgba(123,63,63,0.08);box-shadow:0 8px 30px rgba(0,0,0,0.08)}
+footer{margin-top:12px;font-size:12px;opacity:.8}
+
+/* UI overlay inside canvas is drawn by JS; keep CSS minimal */
+
+/* Positioning container for canvas overlays / HUD */
+.game-wrap{position:relative}
+.hud {position:absolute;left:10px;top:10px;color:var(--accent);font-family:monospace;font-size:11px}
+
+/* Hide duplicate DOM headings; they will be drawn inside the canvas for a pixelated look */
+main > h1, .meta, footer { display: none; }
+
