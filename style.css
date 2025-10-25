@@ -26,10 +26,5 @@ footer{margin-top:12px;font-size:12px;opacity:.8}
 .game-wrap{position:relative}
 .hud {position:absolute;left:10px;top:10px;color:var(--accent);font-family:monospace;font-size:11px}
 
-.hud .audio-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(123,63,63,0.12);padding:6px 8px;border-radius:4px;color:var(--accent);font-family:monospace;cursor:pointer}
-.hud .audio-btn--muted{opacity:0.5}
-
 /* Hide duplicate DOM headings; they will be drawn inside the canvas for a pixelated look */
 main > h1, .meta, footer { display: none; }
-
-
